@@ -1,47 +1,57 @@
+# This is a basic workflow to help you get started with Actions
 
+name: script workflow (Lint, Security, Test, env)
 
-name: Script Workflow (Lint, Security, Test, Env)
-
-
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
-  
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build-and-test:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
 
     env:
-      REQUIRED_VAR: "workflow_value"
+        REQUIRED_VAR: "workflow_value"
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout repository code
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: checkout repository code 
         uses: actions/checkout@v4
 
-     
-      - name: Ensure script is excutable
+      # Runs a single command using the runners shell
+      - name: Ensure script is executable
         run: chmod +x scripts/my-script.sh
-
+        
+      # --- LINTING STAGE ---
       - name: Install ShellCheck (Linter)
         run: sudo apt-get update && sudo apt-get install -y shellcheck
 
       - name: Run ShellCheck on the script
         run: shellcheck scripts/my-script.sh
 
+      # --- SECURITY STAGE (using Flawfinder) ---
       - name: Install Flawfinder (SAST Tool)
         run: sudo apt-get install -y flawfinder
 
       - name: Run Flawfinder security scan on script
+        # Flawfinder scans the file and reports potential security weaknesses
         run: flawfinder scripts/my-script.sh
 
+      # --- TESTING STAGE ---
       - name: Show test message
         run: echo "Running simple test assertion..."
 
@@ -49,4 +59,4 @@ jobs:
         run: ./scripts/my-script.sh
         
 
-    
+blank.yml
