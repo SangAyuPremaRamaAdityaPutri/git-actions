@@ -57,6 +57,3 @@ jobs:
 
       - name: Execute Test Script
         run: ./scripts/my-script.sh
-        
-
-blank.yml
